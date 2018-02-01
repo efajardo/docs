@@ -111,6 +111,26 @@ All other configuration settings should be suitable for most purposes. However, 
 
 ### Optional configuration
 
+### Modifying the limits
+
+Create file named `/etc/sysconfig/gridftp-hdfs`. An example configuration would be:
+
+    :::file
+    export GRIDFTP_TRANSFER_LIMIT="80"
+    export GRIDFTP_DEFAULT_USER_TRANSFER_LIMIT="50"
+    export GRIDFTP_LIGO_USER_TRANSFER_LIMIT="40"
+
+In the above configuration:
+
+- There would be no more than 80 transfers going at a time, across all users.
+- By default, any single user can have no more than 50 transfers at a time.
+- The ligo user has a more stringent limit of 40 transfers at a time.
+
+This way, you can cap the total number of transfers - but no single user will starve out the rest of the site.
+
+!!!note
+    This limits are per gridftp server so if you have several gridftp servers. You might want to have this limits divided by the number of gridftp servers at your site.
+
 #### Modifying the environment
 
 Environment variables are stored in `/etc/sysconfig/globus-gridftp-server` which is sourced on service startup.  If you want to change LCMAPS log levels, or GridFTP port ranges, you can edit them there.
