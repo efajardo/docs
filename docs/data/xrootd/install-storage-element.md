@@ -92,15 +92,17 @@ In the instructions below, %RED%RDRNODE%ENDCOLOR% will refer to the redirector h
 refer to the data node host. 
 These should be replaced with the fully-qualified domain name of the host in question.
 
-#### Modify /etc/xrootd/xrootd-clustered.cfg
+#### Create or modify the file /etc/xrootd/config.d/90-data-server.cfg
 
-You will need to modify the `xrootd-clustered.cfg` on the redirector node and each data node. 
+You will need to modify the `xrootd-clustered.cfg` on the each data node. 
 The following example should serve as a base configuration for clustering. Further customizations are detailed below.
 
 ``` file
 all.export %RED%/tmp%ENDCOLOR% stage
 set xrdr = %RED%RDRNODE%ENDCOLOR%
 all.manager $(xrdr):3121
+all.role server
+cms.space min %RED%2g 5g%ENDCOLOR%
 
 if $(xrdr)
   # Lines in this block are only executed on the redirector node
@@ -173,7 +175,7 @@ root@host # chown xrootd:xrootd /local/xrootd
 ```
 
 We will be running two instances of XRootD on %RED%hostA%ENDCOLOR%. 
-Modify `/etc/xrootd/xrootd-clustered.cfg` to give the two instances different behavior, as such:
+Create or edit file `/etc/xrootd/91-xrootd-SSI.cfg` to give the two instances different behavior, as such:
 
 ``` file
 all.export /data/xrootdfs
@@ -186,7 +188,6 @@ else if $(xrdr)
       all.role manager
       xrd.port 1094
 else
-      all.role server
       oss.localroot /local/xrootd
       ofs.notify closew create mkdir mv rm rmdir trunc | /usr/bin/XrdCnsd -d -D 2 -i 90 -b $(xrdr):1095:/data/inventory
       #add cms.space if you have less the 11GB
@@ -294,7 +295,7 @@ fermicloud054.fnal.gov complete inventory as of Tue Apr 12 07:38:29 2011 /data/x
 
 XRootD can be accessed using the HTTP protocol. To do that:
 
-1.   Modify `/etc/xrootd/xrootd-clustered.cfg` and add the following lines. You will also need to add the configuration regarding [lcmaps authorization](#security-option-3-xrootd-lcmaps-authorization).
+1.   Create or edit `/etc/xrootd/config.d/10-xrootd-http.cfg` and add the following lines. You will also need to add the configuration regarding [lcmaps authorization](#security-option-3-xrootd-lcmaps-authorization).
 
         :::file
            if exec xrootd
@@ -366,7 +367,7 @@ yum install --enablerepo=osg-contrib xrootd-cmstfc
 ```
 
 You will need to add your `storage.xml` to `/etc/xrootd/storage.xml` and then add the following line to your XRootD
-configuration:
+configuration (for example create or edit `/etc/xrootd/config.d/92-local-cms-tfc.cfg`):
 
 ``` file
 # Integrate with CMS TFC, placed in /etc/xrootd/storage.xml
@@ -388,8 +389,8 @@ HDFS-based sites should utilize the `xrootd-hdfs` plugin to allow XRootD to acce
 root@host # yum install xrootd-hdfs
 ```
 
-You will then need to add the following lines to your
-`/etc/xrootd/xrootd-clustered.cfg`:
+You will then need to create or edit the following files and add the following lines
+`/etc/xrootd/config.d/92-hdfs.cfg`:
 
 ``` file
 xrootd.fslib /usr/lib64/libXrdOfs.so
@@ -428,7 +429,7 @@ CMSD_INSTANCES="default"
 FRMD_INSTANCES="default"
 ```
 
-1.  Modify `/etc/xrootd/xrootd-clustered.cfg` on both nodes to specify options for `frm_xfrd` (File Transfer Daemon) and `frm_purged` (File Purging Daemon). For more information, you can visit the [FRM Documentation](http://xrootd.org/doc/dev4/frm_config.htm)
+1.  Create or edit the file `/etc/xrootd/config.d/93-frm.cfg` on both nodes to specify options for `frm_xfrd` (File Transfer Daemon) and `frm_purged` (File Purging Daemon). For more information, you can visit the [FRM Documentation](http://xrootd.org/doc/dev4/frm_config.htm)
 2.  Start frm daemons on data server:
 
 ```console
@@ -559,7 +560,7 @@ Reference
 
 | Service/Process | Configuration File                 | Description                              |
 |:----------------|:-----------------------------------|:-----------------------------------------|
-| `xrootd`        | `/etc/xrootd/xrootd-clustered.cfg` | Main clustered mode XRootD configuration |
+| `xrootd`        | `/etc/xrootd/config.d/` | Configuration directory for Xrootd |
 |                 | `/etc/xrootd/auth_file`            | Authorized users file                    |
 
 | Service/Process          | Log File                         | Description                                 |
