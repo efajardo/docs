@@ -98,12 +98,7 @@ on all data nodes:
 
 1. Modify your XRootD configuration:
 
-    1. Choose the configuration file to edit based on the following table:
-
-        | If you are running XRootD in... | Then modify the following file...   |
-        |:--------------------------------|:------------------------------------|
-        | Standalone mode                 | `/etc/xrootd/xrootd-standalone.cfg` |
-        | Clustered mode                  | `/etc/xrootd/xrootd-clustered.cfg`  |
+    1. Create or edit the file `/etc/xrootd/config.d/92-lcmaps.config`:
 
     1. Add the following lines to the configuration that you chose above:
 
