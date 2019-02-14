@@ -37,7 +37,7 @@ root@xrootd-standalone # yum install xrootd
 Configuring XRootD
 ------------------
 
-To configure XRootD as a standalone server, replace the contents of `/etc/xrootd/xrootd-standalone.cfg` as follows:
+To configure XRootD as a standalone server to serve a data directory, create file name `/etc/xrootd/config.d/90-local-site-config.cfg` with content as follows:
 
 1.  Add an `all.export` directive for each directory that you wish to serve via XRootD.
     For example, to serve the contents of `/store` and `/public`:
@@ -59,29 +59,6 @@ To configure XRootD as a standalone server, replace the contents of `/etc/xrootd
 
     !!! note
         CMS sites should follow CMS policy for `all.sitename`
-
-1.  Append the following configuration to the end of `/etc/xrootd/xrootd-standalone.cfg`
-
-        xrd.port 1094
-        all.role server
-
-        cms.allow host *
-        # Logging verbosity
-        xrootd.trace emsg login stall redirect
-        ofs.trace -all
-        xrd.trace conn
-        cms.trace all
-
-        xrd.report xrd-report.osgstorage.org:9931
-        xrootd.monitor all \
-                       auth \
-                       flush 30s \
-                       window 5s fstat 60 lfn ops xfr 5 \
-                       dest redir fstat info user xrd-report.osgstorage.org:9930 \
-                       dest fstat info user xrd-mon.osgstorage.org:9930
-
-        xrd.network keepalive kaparms 10m,1m,5
-        xrd.timeout idle 60m
 
 ### Configuring authorization
 
@@ -181,15 +158,15 @@ Reference
 ---------
 
 - [XRootD documentation](http://xrootd.slac.stanford.edu/doc)
-- [Export directive](http://xrootd.org/doc/dev48/ofs_config.htm#_Toc401930729) in the XRootD configuration and
-  [relevant options](http://xrootd.org/doc/dev48/ofs_config.htm#_Toc401930728)
+- [Export directive](http://xrootd.org/doc/dev49/ofs_config.htm#_Toc522916544) in the XRootD configuration and
+  [relevant options](http://xrootd.org/doc/dev49/ofs_config.htm#_Toc522916543)
 
 
 ### File locations
 
 | Service/Process | Configuration File                  | Description               |
 |:----------------|:------------------------------------|:--------------------------|
-| `xrootd`        | `/etc/xrootd/xrootd-standalone.cfg` | Main XRootD configuration |
+| `xrootd`        | `/etc/xrootd/config.d/` | Main XRootD configuration dir |
 |                 | `/etc/xrootd/auth_file`             | Authorized users file     |
 
 | Service/Process          | Log File                                | Description                                 |
