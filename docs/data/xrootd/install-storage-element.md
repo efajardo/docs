@@ -103,15 +103,11 @@ set xrdr = %RED%RDRNODE%ENDCOLOR%
 all.manager $(xrdr):3121
 all.role server
 cms.space min %RED%2g 5g%ENDCOLOR%
+```
 
-if $(xrdr)
-  # Lines in this block are only executed on the redirector node
+#### Create or modify the file `/etc/xrootd/config.d/90-redirector.cfg`
+``` file
   all.role manager
-else
-  # Lines in this block are executed on all nodes but the redirector node
-  all.role server
-  cms.space min %RED%2g 5g%ENDCOLOR%
-fi
 ```
 
 You will need to customize the following lines:
