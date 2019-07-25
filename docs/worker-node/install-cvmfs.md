@@ -192,6 +192,27 @@ atlas.cern.ch                   glast.egi.eu         oasis.opensciencegrid.org
 config-osg.opensciencegrid.org  nova.osgstorage.org
 ```
 
+## Configure CVMFS for authenticathed access
+
+!!! warning
+    If you installed `osg-oasis` as mentioned above please ignore this section which is mostly meant for EGI CVMFS installations.
+
+This section covers configuration need for enabling mounts in CVMFS that require authentication.
+
+1. Install  the `cvmfs-x509-helper` rpm.
+
+        :::console
+           root@host # yum install cvmfs-x509-helper
+
+1. Mount the repository `/cvmfs/ligo.osgstorage.org`.
+
+1. Create config file `/etc/cvmfs/config.d/ligo.osgstorage.org.conf` with the following contents:
+
+        :::file
+           X509_CERT_DIR=/cvmfs/oasis.opensciencegrid.org/mis/certificates
+
+1. Install on every compute node IGTF IOTA  (which has the CILogon Basic cert bundle), `ca_policy_igtf-iota`.
+
 ### Troubleshooting problems
 
 If no directories exist under `/cvmfs/`, you can try the following
